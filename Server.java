@@ -12,16 +12,17 @@ public class Server {
                 System.out.println("Good!");
                 DataInputStream dis = new DataInputStream(s.getInputStream());
                 DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-                
+
                 Thread t = new ClientHandler(s, dis, dos);
                 t.start();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 s.close();
                 e.printStackTrace();
             }
         }
     }
 }
+
 class ClientHandler extends Thread {
     final DataInputStream dis;
     final DataOutputStream dos;
@@ -29,11 +30,13 @@ class ClientHandler extends Thread {
     private Nurse nurse;
     static Operator operator;
     private String type;
+
     public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos) {
         this.dis = dis;
         this.dos = dos;
         this.s = s;
     }
+
     @Override
     public void run() {
         String received;
@@ -46,13 +49,12 @@ class ClientHandler extends Thread {
                     ClientHandler.operator = new Operator(this.s, this.dis, this.dos);
                     Nurse.operator = ClientHandler.operator;
                     break;
-                } else if (received.contains(",")
-                        && received.substring(0, received.indexOf(",")).equals("Nurse")){
+                } else if (received.contains(",") && received.substring(0, received.indexOf(",")).equals("Nurse")) {
                     this.type = "Nurse";
                     String name = received.substring(received.indexOf(",") + 1);
                     this.nurse = new Nurse(this.s, this.dis, this.dos);
                     if (ClientHandler.operator != null) {
-                        if(!ClientHandler.operator.nurses.containsKey(name)) {
+                        if (!ClientHandler.operator.nurses.containsKey(name)) {
                             ClientHandler.operator.nurses.put(name, this.nurse);
                             if (ClientHandler.operator.backlog.containsKey(name)) {
                                 ClientHandler.operator.sendBackLog(name);
@@ -68,6 +70,7 @@ class ClientHandler extends Thread {
         while (true) {
             try {
                 received = dis.readUTF();
+                System.out.println("Request Recieved from " + type);
                 if (received.equals("Exit")) {
                     System.out.println("Connection Closed");
                     this.s.close();
@@ -75,11 +78,12 @@ class ClientHandler extends Thread {
                 }
                 toreturn = received;
                 switch (this.type) {
-                    case "Operator" :
-                        String recipient = received.substring(received.indexOf("responder\":\"") + 12, received.indexOf("\", \"time"));
+                    case "Operator":
+                        String recipient = received.substring(received.indexOf("responder\":\"") + 12,
+                                received.indexOf("\", \"time"));
                         ClientHandler.operator.send(recipient, toreturn);
                         break;
-                    case "Nurse" :
+                    case "Nurse":
                         this.nurse.send(toreturn);
                         break;
                     default:
@@ -97,17 +101,20 @@ class ClientHandler extends Thread {
         }
     }
 }
+
 class Operator {
     final DataInputStream dis;
     final DataOutputStream dos;
     final Socket s;
     HashMap<String, Nurse> nurses = new HashMap<String, Nurse>();
     HashMap<String, LinkedList<String>> backlog = new HashMap<String, LinkedList<String>>();
+
     public Operator(Socket s, DataInputStream dis, DataOutputStream dos) {
         this.s = s;
         this.dos = dos;
         this.dis = dis;
     }
+
     public void send(String name, String toreturn) {
         if (this.nurses.containsKey(name)) {
             Nurse receiver = this.nurses.get(name);
@@ -124,23 +131,27 @@ class Operator {
             this.backlog.put(name, tasks);
         }
     }
+
     public void sendBackLog(String name) {
         for (String m : this.backlog.get(name)) {
             this.send(name, m);
         }
     }
 }
+
 class Nurse {
     final DataInputStream dis;
     final DataOutputStream dos;
     final Socket s;
     static Operator operator;
+
     public Nurse(Socket s, DataInputStream dis, DataOutputStream dos) {
         this.s = s;
         this.dos = dos;
         this.dis = dis;
     }
-    public void send (String toreturn) {
+
+    public void send(String toreturn) {
         try {
             operator.dos.writeUTF(toreturn);
         } catch (IOException e) {
