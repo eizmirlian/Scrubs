@@ -16,7 +16,6 @@ public class MainQueue extends JPanel{
         setLayout(layout);
         queue = new RequestQueue();
         queueDisplay = new ArrayList<RequestDisplay>();
-        setSize(400,500);
     }
     
     public void addRequest(Request r) {

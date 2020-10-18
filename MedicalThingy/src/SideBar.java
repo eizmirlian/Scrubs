@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,25 +11,21 @@ public class SideBar extends JPanel implements ActionListener{
     
     private MainWindow container;
     private JButton adder;
-    private JButton settings;
     
     public SideBar(MainWindow inContainer) {
         
         container = inContainer;
         
         adder = new JButton("+");
-        adder.setSize(100,100);
+        adder.setPreferredSize(new Dimension(MainWindow.SIZE/10,MainWindow.SIZE/10));
+        adder.setMinimumSize(new Dimension(MainWindow.SIZE/10,MainWindow.SIZE/10));
+        adder.setMaximumSize(new Dimension(MainWindow.SIZE/10,MainWindow.SIZE/10));
         adder.addActionListener(this);
-        
-        settings = new JButton("settings");
-        settings.setSize(100,100);
-        
         add(adder);
-        add(settings);
         
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setVisible(true);
-        setSize(100,500);
+        this.setBackground(Color.CYAN);
     }
 
     @Override
