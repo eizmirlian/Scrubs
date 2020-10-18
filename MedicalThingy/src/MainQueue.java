@@ -10,7 +10,6 @@ public class MainQueue extends JPanel{
     private MainWindow container;
     
     public MainQueue(MainWindow inContainer) {
-        
         container = inContainer;
         
         layout = new BoxLayout(this, BoxLayout.Y_AXIS);
@@ -26,16 +25,15 @@ public class MainQueue extends JPanel{
         queueDisplay.add(display);
         add(display);
         revalidate();
-        System.out.println(r);
+        Client.send(r.toString());
     }
     
     public void acceptAcknowledge(Acknowledge a) {
         int index = queue.acceptAcknowledge(a);
         if(index != -1) {
-            System.out.println(this.getComponentCount());
             layout.removeLayoutComponent(queueDisplay.get(index));
             queueDisplay.remove(index);
-            System.out.println(this.getComponentCount());
+            System.out.println(a.getId());
             revalidate();
         }
     }

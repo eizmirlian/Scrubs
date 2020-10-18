@@ -10,6 +10,11 @@ public class Acknowledge {
         time = java.time.LocalTime.now().toString();
     }
     
+    public Acknowledge(String inId) {
+        id = Integer.valueOf(inId);
+        time = java.time.LocalTime.now().toString();
+    }
+    
     public String getTime() {
         return time;
     }

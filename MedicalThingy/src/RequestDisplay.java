@@ -14,14 +14,12 @@ public class RequestDisplay extends JPanel{
         GridBagConstraints gbc = new GridBagConstraints();
         setLayout(layout);
         
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 4;
         JLabel nameLabel = new JLabel(request.getPatientName());
         add(nameLabel,gbc);
         
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(new JLabel("Responder:"),gbc);
