@@ -3,11 +3,10 @@ public class Test {
         MainWindow main = new MainWindow();
         Client server = new Client("128.61.86.69",5651);
         Client.send("Operator");
-        Client.send("Exit");
         main.run();
-        /*while(true){
-            int i = 0;
-            System.out.println(i);
-        }*/
+        while(true){
+            String in = Client.listen();
+            main.acceptAcknowledge(new Acknowledge(in));
+        }
     }
 }

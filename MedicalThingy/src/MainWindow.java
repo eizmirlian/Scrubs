@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,11 +15,13 @@ public class MainWindow extends JFrame{
     }
     
     public void run() {
-        side.setSize(100,500);
+        side.setSize(200,1000);
         this.add(side, BorderLayout.WEST);
+        queue.setSize(800,1000);
+        
         this.add(queue, BorderLayout.CENTER);
         
-        this.setSize(500,500);
+        this.setSize(1000,1000);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
